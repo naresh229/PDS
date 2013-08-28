@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="PDS" basedir="." default="jar">
+
+	<property name="pds.propertis.file" value="pds.properties"/>
+	<property  file="${pds.propertis.file}"/>
+
+    <target name="clean" description="Delete all generated files">
+        <delete dir="${pds.ant.classes.src.dir}" failonerror="false"/>
+        <delete file="${ant.project.name}.jar"/>
+    </target>
+
+    <target name="compile" description="Compiles the Tasks" depends="clean">
+        <mkdir dir="${pds.ant.classes.src.dir}"/>
+        <javac srcdir="${pds.ant.tasks.src.dir}" destdir="${pds.ant.classes.src.dir}"/>
+    </target>
+
+    <target name="jar" description="JARs the Task" depends="compile">
+        <jar destfile="${ant.project.name}.jar" basedir="${pds.ant.classes.src.dir}"/>
+    </target>
+
+	<target name="use" description="Use the Task" depends="jar">
+		  <taskdef name="loadAppServerDetails" classname="com.ot.pds.ant.tasks.LoadAppServerDetailsTask" classpath="${ant.project.name}.jar"/>
+		  <loadAppServerDetails portalRoot="${pds.portal.root.dir}" pdsConfigFile="${pds.config.file.name}" />
+	</target>
+	
+	
+</project>
